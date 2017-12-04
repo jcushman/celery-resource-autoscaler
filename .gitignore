@@ -1,0 +1,13 @@
+*.log
+*.pyc
+.cache/
+.coverage
+.idea/
+.vscode/
+.tox/
+celery_resource_autoscaler.egg-info/
+build/
+dist/
+docs/build/
+venv/
+wheelhouse/
