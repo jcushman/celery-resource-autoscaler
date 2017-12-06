@@ -22,7 +22,7 @@ class ResourceAutoscaler(CeleryAutoscaler):
         proc_count = self.processes
         task_count = self.qty
 
-        info("%s processed, %s tasks" % (proc_count, task_count))
+        info("Autoscale: %s processes and %s tasks" % (proc_count, task_count))
 
         # Get (min, max) target ranges that proc_count should fit inside
         proc_ranges = [
@@ -32,15 +32,15 @@ class ResourceAutoscaler(CeleryAutoscaler):
 
         # Scale down to the lowest max value ...
         max_procs = min(max_procs for min_procs, max_procs in proc_ranges if max_procs is not None)
-        info(proc_ranges, max_procs)
+        max_procs = max(max_procs, 1)  # don't scale below 1
         if proc_count > max_procs:
-            info("Scaling down by %s" % (proc_count - max_procs))
+            info("Requesting scale down by %s" % (proc_count - max_procs))
             self.scale_down(proc_count - max_procs)
             return True
 
         # ... or scale up to the highest min value
         min_procs = max(min_procs for min_procs, max_procs in proc_ranges if min_procs is not None)
         if proc_count < min_procs:
-            info("Scaling up by %s" % (min_procs - proc_count))
+            info("Requesting scale up by %s" % (min_procs - proc_count))
             self.scale_up(min_procs - proc_count)
             return True

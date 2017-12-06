@@ -1,10 +1,10 @@
-import re
-
+import psutil
 from celery.utils.log import get_logger
 
 
 logger = get_logger(__name__)
 debug, info, error = logger.debug, logger.info, logger.error
+
 
 class MemoryLimit:
     def __init__(self, min_memory=0.0, max_memory=1.0):
@@ -21,17 +21,5 @@ class MemoryLimit:
             return (proc_count+1, None)
         return (None, None)
 
-    re_total = re.compile(r"MemTotal:\s+(?P<total>\d+)\s+kB")
-    re_free = re.compile(r"MemFree:\s+(?P<free>\d+)\s+kB")
     def _get_used_mem(self):
-        try:
-            # Try using the cross platform method.
-            import psutil
-        except ImportError:
-            # If not, make it work for most linux distros.
-            with open('/proc/meminfo', 'rb') as f:
-                mem = f.read()
-            return 1.0 - (1.0 * int(self.re_free.search(mem).group("free")) /
-                    int(self.re_total.search(mem).group("total")))
-        else:
-            return psutil.virtual_memory().percent / 100
+        return psutil.virtual_memory().percent / 100

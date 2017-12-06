@@ -43,7 +43,7 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 
-    install_requires=['celery'],
+    install_requires=['celery', 'psutil'],
     extras_require={
         'test': ['coverage', 'pytest', 'mock'],
     },
