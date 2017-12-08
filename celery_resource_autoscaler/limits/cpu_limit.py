@@ -16,7 +16,6 @@ class CPULimit:
 
     def get_range(self, proc_count, req):
         cur_load = self._get_load()
-        info("Current CPU usage %s" % cur_load)
         if cur_load > self.max_load:
             info("CPU limit: load average %s exceeds maximum %s. Requesting scale down." % (cur_load, self.max_load))
             return (None, proc_count-1)

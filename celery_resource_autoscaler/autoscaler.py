@@ -22,7 +22,7 @@ class ResourceAutoscaler(CeleryAutoscaler):
         proc_count = self.processes
         task_count = self.qty
 
-        info("Autoscale: %s processes and %s tasks" % (proc_count, task_count))
+        info("Autoscale: %s processes and %s reserved tasks" % (proc_count, task_count))
 
         # Get (min, max) target ranges that proc_count should fit inside
         proc_ranges = [
